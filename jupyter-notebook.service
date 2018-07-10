@@ -4,7 +4,6 @@ Description=Jupyter notebook
 [Service]
 User=jovyan
 Type=simple
-#ExecStart=/opt/conda/bin/jupyter notebook
 ExecStart=/usr/local/bin/start-notebook.sh
 #StandardOutput=journal
 
@@ -15,7 +14,8 @@ Environment=HOME=/home/jovyan
 
 # Taken from
 # https://github.com/jupyterhub/jupyterhub/blob/0.9.1/jupyterhub/spawner.py#L596
-PassEnvironment=JUPYTERHUB_API_TOKEN JUPYTERHUB_ADMIN_ACCESS PassEnvironment=JUPYTERHUB_CLIENT_ID JUPYTERHUB_COOKIE_OPTIONS JUPYTERHUB_HOST JUPYTERHUB_OAUTH_CALLBACK_URL
+PassEnvironment=JUPYTERHUB_API_TOKEN JUPYTERHUB_ADMIN_ACCESS
+PassEnvironment=JUPYTERHUB_CLIENT_ID JUPYTERHUB_COOKIE_OPTIONS JUPYTERHUB_HOST JUPYTERHUB_OAUTH_CALLBACK_URL
 PassEnvironment=JUPYTERHUB_USER JUPYTERHUB_API_URL JUPYTERHUB_BASE_URL JUPYTERHUB_SERVICE_PREFIX
 PassEnvironment=MEM_LIMIT MEM_GUARANTEE CPU_LIMIT CPU_GUARANTEE
 
