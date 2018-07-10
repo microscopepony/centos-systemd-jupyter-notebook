@@ -6,11 +6,7 @@ set -e
 
 if [[ ! -z "${JUPYTERHUB_API_TOKEN}" ]]; then
   # launched by JupyterHub, use single-user entrypoint
-  exec /usr/local/bin/start-singleuser.sh $*
+  exec /opt/conda/bin/jupyter labhub --ip=0.0.0.0 $@ $*
 else
-  if [[ ! -z "${JUPYTER_ENABLE_LAB}" ]]; then
-    exec /opt/conda/bin/jupyter lab $*
-  else
-    exec /opt/conda/bin/jupyter notebook $*
-  fi
+  exec /opt/conda/bin/jupyter lab $*
 fi

@@ -7,15 +7,16 @@ This is based on https://github.com/jupyter/docker-stacks/tree/ede5987507cfb52a7
 
 ## Usage
 
+Generate a secure access token.
 Run the container in privileged mode (it may be possible to run Systemd with lower privileges):
 
-    docker run -it --rm --name jupyter-notebook -p 8888:8888 --privileged -e JUPYTER_ENABLE_LAB=1 centos-systemd-jupyter-notebook
+    JUPYTER_TOKEN=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 32)
+    docker run -d --name jupyter-notebook -p 8888:8888 --privileged \
+        -e JUPYTER_TOKEN=$JUPYTER_TOKEN centos-systemd-jupyter-notebook
 
-Log in and get the token:
+Open the notebook server in your browser:
 
-    docker exec -it jupyter-notebook bash -c "journalctl -u jupyter-notebook | grep -A2 'Copy/paste this URL'"
-
-In the URL change the hostname to localhost and paste into your browser.
+    echo http://localhost:8888/?token=$JUPYTER_TOKEN
 
 
 ## Shell kernel

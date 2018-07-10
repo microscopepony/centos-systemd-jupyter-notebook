@@ -19,6 +19,10 @@ PassEnvironment=JUPYTERHUB_CLIENT_ID JUPYTERHUB_COOKIE_OPTIONS JUPYTERHUB_HOST J
 PassEnvironment=JUPYTERHUB_USER JUPYTERHUB_API_URL JUPYTERHUB_BASE_URL JUPYTERHUB_SERVICE_PREFIX
 PassEnvironment=MEM_LIMIT MEM_GUARANTEE CPU_LIMIT CPU_GUARANTEE
 
+# Allows token to be set at startup
+# https://github.com/jupyter/notebook/pull/2921
+PassEnvironment=JUPYTER_TOKEN
+
 
 [Install]
 WantedBy=multi-user.target
