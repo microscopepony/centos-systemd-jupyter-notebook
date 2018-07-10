@@ -1,0 +1,23 @@
+{
+  "console:linebreak": {
+    "command": "console:linebreak",
+    "keys": [
+      "Ctrl Enter"
+    ],
+    "selector": ".jp-CodeConsole-promptCell"
+  },
+  "console:run-forced": {
+    "command": "console:run-forced",
+    "keys": [
+      "Shift Enter"
+    ],
+    "selector": ".jp-CodeConsole-promptCell"
+  },
+  "console:run-unforced": {
+    "command": "console:run-unforced",
+    "keys": [
+      "Enter"
+    ],
+    "selector": ".jp-CodeConsole-promptCell"
+  }
+}

@@ -59,12 +59,14 @@ RUN pip install bash-kernel==0.7.1 && \
 
 EXPOSE 8888
 
+# Changes the console so <enter> runs a command instead of <shift-enter>
+COPY jupyterlab-console-enter.json /home/$NB_USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/plugin.jupyterlab-settings
 USER root
 
+RUN chown $NB_USER:$NB_GID /home/$NB_USER/
 RUN echo "$NB_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/notebook
 COPY jupyter-notebook.service /etc/systemd/system/
 COPY start-notebook.sh /usr/local/bin/
-COPY start-singleuser.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /etc/jupyter/
 
 RUN ln -s /etc/systemd/system/jupyter-notebook.service /etc/systemd/system/multi-user.target.wants/jupyter-notebook.service
