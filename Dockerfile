@@ -61,6 +61,8 @@ EXPOSE 8888
 
 # Changes the console so <enter> runs a command instead of <shift-enter>
 COPY jupyterlab-console-enter.json /home/$NB_USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/plugin.jupyterlab-settings
+COPY omero-server-bash.ipynb /home/$NB_USER/
+
 USER root
 
 RUN chown $NB_USER:$NB_GID /home/$NB_USER/
