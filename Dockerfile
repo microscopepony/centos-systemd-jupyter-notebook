@@ -53,14 +53,27 @@ RUN conda install --quiet --yes \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn
 
-# Bash kernel https://github.com/takluyver/bash_kernel
+# Bash and Ansible kernels
+# - https://github.com/takluyver/bash_kernel
+# - https://github.com/ansible/ansible-jupyter-kernel
+RUN conda create -n python2 -y \
+    python=2.7 \
+    ansible
 RUN pip install bash-kernel==0.7.1 && \
-    python -m bash_kernel.install
-
+    python -m bash_kernel.install --sys-prefix
+USER root
+RUN yum install -y -q gcc && \
+    su $NB_USER -c \
+    "/opt/conda/envs/python2/bin/pip install ansible-kernel==0.5.0" && \
+    yum remove -y -q gcc cpp '*-devel' '*-headers' && \
+    /opt/conda/envs/python2/bin/python -m ansible_kernel.install
+    # --sys-prefix
 EXPOSE 8888
 
+USER $NB_UID
 # Changes the console so <enter> runs a command instead of <shift-enter>
 COPY jupyterlab-console-enter.json /home/$NB_USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/plugin.jupyterlab-settings
+COPY omero-server-bash.ipynb /home/$NB_USER/
 USER root
 
 RUN chown $NB_USER:$NB_GID /home/$NB_USER/
