@@ -3,6 +3,7 @@ Description=Jupyter notebook
 
 [Service]
 User=jovyan
+Group=users
 Type=simple
 ExecStart=/usr/local/bin/start-notebook.sh
 #StandardOutput=journal

@@ -22,7 +22,7 @@ ENV PATH=$CONDA_DIR/bin:$PATH \
 
 # Create jovyan user with UID=1000 and in the 'users' group
 # and make sure these dirs are writable by the `users` group.
-RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+RUN useradd -m -s /bin/bash -N -u $NB_UID -g users $NB_USER && \
     mkdir -p $CONDA_DIR && \
     chown $NB_USER:$NB_GID $CONDA_DIR
 
