@@ -15,8 +15,6 @@
     - role: openmicroscopy.omero-server
       omero_server_release: latest
       omero_server_rootpassword: secret
-      # Workaround for running in docker
-      omero_server_systemd_require_network: False
 
     - role: openmicroscopy.omero-web
       omero_web_release: latest

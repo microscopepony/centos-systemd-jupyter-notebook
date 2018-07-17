@@ -1,4 +1,4 @@
-FROM centos/systemd
+FROM centos:7
 MAINTAINER spli@dundee.ac.uk
 # Based on
 # https://github.com/jupyter/docker-stacks/blob/ede5987507cfb52a70e0909f321baf4b059c2add/base-notebook/Dockerfile
@@ -61,7 +61,7 @@ RUN pip install bash-kernel==0.7.1 && \
 RUN conda install --quiet --yes nbserverproxy && \
     jupyter serverextension enable --py nbserverproxy
 
-EXPOSE 4063 4064 80 8888
+EXPOSE 80 4063 4064 8888
 
 # # Changes the console so <enter> runs a command instead of <shift-enter>
 # COPY jupyterlab-console-enter.json /home/$NB_USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/plugin.jupyterlab-settings
@@ -71,10 +71,17 @@ COPY README.md /
 
 USER root
 
+# https://github.com/gdraheim/docker-systemctl-replacement
+RUN curl -o /usr/bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/v1.3.2236/files/docker/systemctl.py
+RUN ln -s /usr/bin/systemctl /usr/bin/systemd
+
 RUN chown -R $NB_USER:$NB_GID /home/$NB_USER/ /notebooks/
 RUN echo "$NB_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/notebook
-COPY jupyter-notebook.service /etc/systemd/system/
 COPY start-notebook.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /etc/jupyter/
 
+# Configure container startup
+COPY jupyter-notebook.service /etc/systemd/system/
 RUN ln -s /etc/systemd/system/jupyter-notebook.service /etc/systemd/system/multi-user.target.wants/jupyter-notebook.service
+
+ENTRYPOINT ["/usr/bin/systemd", "init"]
