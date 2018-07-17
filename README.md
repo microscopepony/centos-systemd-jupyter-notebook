@@ -11,12 +11,15 @@ Generate a secure access token.
 Run the container in privileged mode (it may be possible to run Systemd with lower privileges):
 
     JUPYTER_TOKEN=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 32)
-    docker run -d --name jupyter-notebook -p 8888:8888 --privileged \
+    docker run -d --name jupyter-notebook --privileged \
+        -p 8888:8888 -p 8080:80 -p 4064:4064 \
         -e JUPYTER_TOKEN=$JUPYTER_TOKEN centos-systemd-jupyter-notebook
 
 Open the notebook server in your browser:
 
     echo http://localhost:8888/?token=$JUPYTER_TOKEN
+
+And open the [notebooks](notebooks) directory.
 
 
 ## Shell kernel

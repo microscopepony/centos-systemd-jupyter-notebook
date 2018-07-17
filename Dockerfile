@@ -57,15 +57,21 @@ RUN conda install --quiet --yes \
 RUN pip install bash-kernel==0.7.1 && \
     python -m bash_kernel.install
 
-EXPOSE 8888
+# Arbitrary web service proxy https://github.com/jupyterhub/nbserverproxy
+RUN conda install --quiet --yes nbserverproxy && \
+    jupyter serverextension enable --py nbserverproxy
 
-# Changes the console so <enter> runs a command instead of <shift-enter>
-COPY jupyterlab-console-enter.json /home/$NB_USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/plugin.jupyterlab-settings
-COPY omero-server-bash.ipynb /home/$NB_USER/
+EXPOSE 4063 4064 80 8888
+
+# # Changes the console so <enter> runs a command instead of <shift-enter>
+# COPY jupyterlab-console-enter.json /home/$NB_USER/.jupyter/lab/user-settings/@jupyterlab/shortcuts-extension/plugin.jupyterlab-settings
+
+COPY notebooks/ /notebooks/
+COPY README.md /
 
 USER root
 
-RUN chown $NB_USER:$NB_GID /home/$NB_USER/
+RUN chown -R $NB_USER:$NB_GID /home/$NB_USER/ /notebooks/
 RUN echo "$NB_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/notebook
 COPY jupyter-notebook.service /etc/systemd/system/
 COPY start-notebook.sh /usr/local/bin/
