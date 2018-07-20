@@ -18,6 +18,22 @@
 
     - role: openmicroscopy.omero-web
       omero_web_release: latest
+      omero_web_config_set:
+        # Not normally necessary, but allows OMERO.web to be accessed over
+        # the jupyter UI via nbserverproxy
+        omero.web.prefix: /proxy/80
+        omero.web.static_url: /proxy/80/static
+
+  tasks:
+
+    - name: Rewrite OMERO.web prefix nginx to work with nbserverproxy
+      become: yes
+      lineinfile:
+        path: /etc/nginx/conf.d/omero-web.conf
+        insertbefore: "}"
+        line: "location / { rewrite ^/(.*)$ /proxy/80/$1 last; }"
+      notify:
+      - restart nginx
 
   vars:
     # Speed up installation by using a pre-compiled IcePy package
