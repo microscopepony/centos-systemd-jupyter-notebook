@@ -10,7 +10,7 @@ This is based on https://github.com/jupyter/docker-stacks/tree/ede5987507cfb52a7
 Generate a secure access token.
 Run the container:
 
-    JUPYTER_TOKEN=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 32)
+    JUPYTER_TOKEN=$(env LANG=C tr -dc A-Za-z0-9 < /dev/urandom | head -c 32)
     docker run -d --name jupyter-notebook \
         -p 8888:8888 -p 8080:80 -p 4064:4064 \
         -e JUPYTER_TOKEN=$JUPYTER_TOKEN centos-systemd-jupyter-notebook
