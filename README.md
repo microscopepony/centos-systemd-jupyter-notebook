@@ -1,5 +1,7 @@
 # CentOS systemd Jupyter Notebook
 
+[![Binder](https://mybinder.org/badge.svg) Launch on MyBinder](https://mybinder.org/v2/gh/manics/centos-systemd-jupyter-notebook/master?urlpath=lab/tree/notebooks/omero-server-bash.ipynb)
+
 Base notebook for running bash in JupyterHub with a CentOS 7 System image.
 
 This is based on https://github.com/jupyter/docker-stacks/tree/ede5987507cfb52a70e0909f321baf4b059c2add/base-notebook
