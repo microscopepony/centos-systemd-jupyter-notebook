@@ -72,16 +72,21 @@ COPY README.md /
 USER root
 
 # https://github.com/gdraheim/docker-systemctl-replacement
-RUN curl -o /usr/bin/systemctl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/v1.3.2236/files/docker/systemctl.py
-RUN ln -s /usr/bin/systemctl /usr/bin/systemd
+# Upgrade systemd now to reduce likelihood of it being upgraded and
+# overwriting this replacement script
+ARG SYSTEMCTL=https://raw.githubusercontent.com/manics/docker-systemctl-replacement/devel/files/docker/systemctl.py
+#ARG SYSTEMCTL=https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py
+RUN yum update -y -q systemd && \
+    curl -o /usr/bin/systemctl $SYSTEMCTL && \
+    ln -s /usr/bin/systemctl /usr/bin/systemd
 
-RUN chown -R $NB_USER:$NB_GID /home/$NB_USER/ /notebooks/
-RUN echo "$NB_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/notebook
 COPY start-notebook.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /etc/jupyter/
-
-# Configure container startup
 COPY jupyter-notebook.service /etc/systemd/system/
-RUN ln -s /etc/systemd/system/jupyter-notebook.service /etc/systemd/system/multi-user.target.wants/jupyter-notebook.service
 
-ENTRYPOINT ["/usr/bin/systemd", "init"]
+# Fix permissions, configure container startup
+RUN chown -R $NB_USER:$NB_GID /home/$NB_USER/ /notebooks/ && \
+    echo "$NB_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/notebook && \
+    ln -s /etc/systemd/system/jupyter-notebook.service /etc/systemd/system/multi-user.target.wants/jupyter-notebook.service
+
+ENTRYPOINT ["/usr/bin/systemd", "-v", "init"]
