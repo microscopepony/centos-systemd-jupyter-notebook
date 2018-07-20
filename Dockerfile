@@ -80,7 +80,7 @@ RUN yum update -y -q systemd && \
     curl -o /usr/bin/systemctl $SYSTEMCTL && \
     ln -s /usr/bin/systemctl /usr/bin/systemd
 
-COPY entrypoint.sh start-notebook.sh /usr/local/bin/
+COPY start-notebook.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /etc/jupyter/
 COPY jupyter-notebook.service /etc/systemd/system/
 
@@ -89,5 +89,6 @@ RUN chown -R $NB_USER:$NB_GID /home/$NB_USER/ /notebooks/ && \
     echo "$NB_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/notebook && \
     ln -s /etc/systemd/system/jupyter-notebook.service /etc/systemd/system/multi-user.target.wants/jupyter-notebook.service
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD []
+USER $NB_UID
+
+CMD ["/usr/local/bin/start-notebook.sh"]
