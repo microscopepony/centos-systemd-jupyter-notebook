@@ -24,6 +24,7 @@ PassEnvironment=MEM_LIMIT MEM_GUARANTEE CPU_LIMIT CPU_GUARANTEE
 # https://github.com/jupyter/notebook/pull/2921
 PassEnvironment=JUPYTER_TOKEN
 
+EnvironmentFile=-/etc/jupyter/jupyter-notebook-service-env
 
 [Install]
 WantedBy=multi-user.target

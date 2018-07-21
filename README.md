@@ -1,10 +1,10 @@
 # CentOS systemd Jupyter Notebook
 
-[![Binder](https://mybinder.org/badge.svg) Launch on MyBinder](https://mybinder.org/v2/gh/manics/centos-systemd-jupyter-notebook/master?urlpath=lab/tree/notebooks/omero-server-bash.ipynb)
-
-Base notebook for running bash in JupyterHub with a CentOS 7 System image.
+Notebook for running bash in JupyterHub with a CentOS 7 System image.
 
 This is based on https://github.com/jupyter/docker-stacks/tree/ede5987507cfb52a70e0909f321baf4b059c2add/base-notebook
+
+Includes an example of installing OMERO with Ansible.
 
 
 ## Usage
@@ -27,7 +27,7 @@ Open [`omero-server-bash.ipynb`](notebooks/omero-server-bash.ipynb) in the [`not
 ## Shell kernel
 
 The Bash kernel is installed.
-The default `jovyan` user has passwordless `sudo` rights.
+The default `jovyan` user has password-less `sudo` rights.
 
 
 ## Technical notes
