@@ -21,8 +21,8 @@
       omero_web_config_set:
         # Not normally necessary, but allows OMERO.web to be accessed over
         # the jupyter UI via nbserverproxy
-        omero.web.prefix: /proxy/80
-        omero.web.static_url: /proxy/80/static
+        omero.web.prefix: "{{ web_prefix }}proxy/80"
+        omero.web.static_url: "{{ web_prefix }}proxy/80/static"
 
   tasks:
 
@@ -31,10 +31,11 @@
       lineinfile:
         path: /etc/nginx/conf.d/omero-web.conf
         insertbefore: "}"
-        line: "location / { rewrite ^/(.*)$ /proxy/80/$1 last; }"
+        line: "location / { rewrite ^/(.*)$ {{ web_prefix }}proxy/80/$1 last; }"
       notify:
       - restart nginx
 
   vars:
     # Speed up installation by using a pre-compiled IcePy package
     ice_python_wheel: https://github.com/openmicroscopy/zeroc-ice-py-centos7/releases/download/0.0.3/zeroc_ice-3.6.4-cp27-cp27mu-linux_x86_64.whl
+    web_prefix: "{{ ansible_env.JUPYTERHUB_SERVICE_PREFIX | default('/') }}"

@@ -74,11 +74,13 @@ USER root
 # https://github.com/gdraheim/docker-systemctl-replacement
 # Upgrade systemd now to reduce likelihood of it being upgraded and
 # overwriting this replacement script
+# Create /run/systemd/system to fool Ansible into thinking systemd is running
 ARG SYSTEMCTL=https://raw.githubusercontent.com/manics/docker-systemctl-replacement/devel/files/docker/systemctl.py
 #ARG SYSTEMCTL=https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py
 RUN yum update -y -q systemd && \
     curl -o /usr/bin/systemctl $SYSTEMCTL && \
-    ln -s /usr/bin/systemctl /usr/bin/systemd
+    ln -s /usr/bin/systemctl /usr/bin/systemd && \
+    mkdir -p /run/systemd/system
 
 COPY start-notebook.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /etc/jupyter/
