@@ -8,6 +8,12 @@ RUN yum install -q -y \
     bzip2 \
     sudo
 
+# Install Tini
+RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.18.0/tini && \
+    echo "12d20136605531b09a2c2dac02ccee85e1b874eb322ef6baf7561cd93f93c855 *tini" | sha256sum -c - && \
+    mv tini /usr/local/bin/tini && \
+    chmod +x /usr/local/bin/tini
+
 # Configure environment
 ENV CONDA_DIR=/opt/conda \
     SHELL=/bin/bash \
@@ -93,4 +99,5 @@ RUN chown -R $NB_USER:$NB_GID /home/$NB_USER/ /notebooks/ && \
 
 USER $NB_UID
 
+ENTRYPOINT ["/usr/local/bin/tini", "-g", "--"]
 CMD ["/usr/local/bin/start-notebook.sh"]
